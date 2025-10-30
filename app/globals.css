@@ -1,26 +1,121 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Minimal Color Palette */
+  --primary: #1a1a1a;
+  --primary-hover: #333333;
+  --secondary: #666666;
+  --accent: #000000;
+  --dark: #0a0a0a;
+  --darker: #000000;
+  --light: #fafafa;
+  --gray: #888888;
+  --gray-light: #e5e5e5;
+  --gray-lighter: #f5f5f5;
+  --white: #ffffff;
+  --border: #e0e0e0;
+
+  --background: var(--white);
+  --foreground: var(--dark);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-dark: var(--dark);
+  --color-darker: var(--darker);
+  --color-light: var(--light);
+  --color-gray: var(--gray);
+  --color-gray-light: var(--gray-light);
+  --color-gray-lighter: var(--gray-lighter);
+  --color-white: var(--white);
+  --color-border: var(--border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Minimal Smooth Animations */
+* {
+  transition: all 0.15s ease;
+}
+
+/* Minimal Card Styles */
+.modern-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.modern-card:hover {
+  border-color: var(--gray-light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+
+/* Minimal Button Styles */
+.modern-button {
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.modern-button:hover {
+  transform: translateY(-1px);
+}
+
+.modern-button:active {
+  transform: translateY(0);
+}
+
+/* Minimal Backgrounds */
+.gradient-primary {
+  background: var(--dark);
+}
+
+.gradient-secondary {
+  background: var(--primary);
+}
+
+.gradient-accent {
+  background: var(--accent);
+}
+
+/* Minimal Input Styles */
+.modern-input {
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  background: var(--white);
+  transition: all 0.2s ease;
+}
+
+.modern-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Badge Styles */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
 }
