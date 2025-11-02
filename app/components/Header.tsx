@@ -4,10 +4,22 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
+import { useUser } from '../context/UserContext';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const { cartCount } = useCart();
+  const { isLoggedIn, user } = useUser();
+
+  const categories = [
+    { id: 'el-aletleri', name: 'El Aletleri', icon: '🔨' },
+    { id: 'elektrikli-aletler', name: 'Elektrikli Aletler', icon: '⚡' },
+    { id: 'boya', name: 'Boya & Badana', icon: '🎨' },
+    { id: 'hirdavat', name: 'Hırdavat', icon: '🔩' },
+    { id: 'yapi', name: 'Yapı Malzemeleri', icon: '🏗️' },
+    { id: 'bahce', name: 'Bahçe & Dış Mekan', icon: '🌱' },
+  ];
 
   return (
     <header className="bg-white sticky top-0 z-50 border-b border-border">
@@ -15,9 +27,9 @@ export default function Header() {
         {/* Top Bar */}
         <div className="border-b border-border py-2.5 text-sm">
           <div className="flex justify-between items-center">
-            <p className="text-secondary">
-              Tel: 0555 123 45 67
-            </p>
+            <a href="tel:05458527726" className="text-secondary hover:text-dark transition-colors">
+              Tel: 0545 852 77 26
+            </a>
             <p className="hidden md:block text-secondary">
               Ücretsiz Kargo - 500 TL ve Üzeri
             </p>
@@ -48,7 +60,53 @@ export default function Header() {
             <nav className="hidden lg:flex items-center gap-8">
               <Link href="/" className="text-dark hover:text-dark/70 transition-colors text-sm">Ana Sayfa</Link>
               <Link href="/urunler" className="text-dark hover:text-dark/70 transition-colors text-sm">Ürünler</Link>
-              <Link href="/kategoriler" className="text-dark hover:text-dark/70 transition-colors text-sm">Kategoriler</Link>
+
+              {/* Categories Dropdown */}
+              <div
+                className="relative"
+                onMouseEnter={() => setIsCategoriesOpen(true)}
+                onMouseLeave={() => setIsCategoriesOpen(false)}
+              >
+                <button className="text-dark hover:text-dark/70 transition-colors text-sm flex items-center gap-1 py-2">
+                  Kategoriler
+                  <svg className={`w-4 h-4 transition-transform ${isCategoriesOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {isCategoriesOpen && (
+                  <div className="absolute top-full left-0 pt-2 w-64 z-50">
+                    <div className="bg-white border border-border rounded-lg shadow-xl">
+                      <div className="p-2">
+                        {categories.map((category) => (
+                          <Link
+                            key={category.id}
+                            href={`/urunler?category=${category.id}`}
+                            className="flex items-center gap-3 px-4 py-3 hover:bg-light rounded-lg transition-colors group"
+                          >
+                            <span className="text-2xl">{category.icon}</span>
+                            <span className="text-dark group-hover:text-dark/70 text-sm font-medium">{category.name}</span>
+                            <svg className="w-4 h-4 ml-auto text-secondary group-hover:text-dark transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </Link>
+                        ))}
+                        <div className="border-t border-border my-2"></div>
+                        <Link
+                          href="/urunler"
+                          className="flex items-center justify-center gap-2 px-4 py-3 hover:bg-dark hover:text-white rounded-lg transition-all text-sm font-semibold"
+                        >
+                          Tüm Ürünleri Gör
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                          </svg>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <Link href="/kampanyalar" className="text-dark hover:text-dark/70 transition-colors text-sm">Kampanyalar</Link>
               <Link href="/hakkimizda" className="text-dark hover:text-dark/70 transition-colors text-sm">Hakkımızda</Link>
               <Link href="/iletisim" className="text-dark hover:text-dark/70 transition-colors text-sm">İletişim</Link>
@@ -62,6 +120,17 @@ export default function Header() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </button>
+
+              {/* Account */}
+              <Link
+                href={isLoggedIn ? "/hesabim" : "/hesap"}
+                className="hidden md:flex items-center justify-center w-9 h-9 hover:bg-gray-lighter text-secondary hover:text-dark transition-colors rounded"
+                title={isLoggedIn ? user?.name : "Giriş Yap"}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </Link>
 
               {/* Cart */}
               <Link href="/sepet" className="relative flex items-center justify-center w-9 h-9 hover:bg-gray-lighter text-secondary hover:text-dark transition-colors rounded">
@@ -94,10 +163,49 @@ export default function Header() {
             <nav className="flex flex-col gap-1">
               <Link href="/" className="text-dark hover:bg-gray-lighter transition-colors py-2.5 px-3 rounded text-sm">Ana Sayfa</Link>
               <Link href="/urunler" className="text-dark hover:bg-gray-lighter transition-colors py-2.5 px-3 rounded text-sm">Ürünler</Link>
-              <Link href="/kategoriler" className="text-dark hover:bg-gray-lighter transition-colors py-2.5 px-3 rounded text-sm">Kategoriler</Link>
+
+              {/* Mobile Categories */}
+              <div>
+                <button
+                  onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                  className="w-full text-left text-dark hover:bg-gray-lighter transition-colors py-2.5 px-3 rounded text-sm flex items-center justify-between"
+                >
+                  Kategoriler
+                  <svg className={`w-4 h-4 transition-transform ${isCategoriesOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {isCategoriesOpen && (
+                  <div className="ml-4 mt-1 space-y-1">
+                    {categories.map((category) => (
+                      <Link
+                        key={category.id}
+                        href={`/urunler?category=${category.id}`}
+                        className="flex items-center gap-2 text-secondary hover:text-dark hover:bg-gray-lighter transition-colors py-2 px-3 rounded text-sm"
+                      >
+                        <span>{category.icon}</span>
+                        <span>{category.name}</span>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <Link href="/kampanyalar" className="text-dark hover:bg-gray-lighter transition-colors py-2.5 px-3 rounded text-sm">Kampanyalar</Link>
               <Link href="/hakkimizda" className="text-dark hover:bg-gray-lighter transition-colors py-2.5 px-3 rounded text-sm">Hakkımızda</Link>
               <Link href="/iletisim" className="text-dark hover:bg-gray-lighter transition-colors py-2.5 px-3 rounded text-sm">İletişim</Link>
+
+              <div className="border-t border-border my-2"></div>
+
+              <Link
+                href={isLoggedIn ? "/hesabim" : "/hesap"}
+                className="text-dark hover:bg-gray-lighter transition-colors py-2.5 px-3 rounded text-sm flex items-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                {isLoggedIn ? user?.name : "Giriş Yap / Kayıt Ol"}
+              </Link>
             </nav>
           </div>
         )}

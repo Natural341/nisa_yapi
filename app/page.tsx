@@ -5,12 +5,12 @@ import Footer from './components/Footer';
 
 export default function Home() {
   const categories = [
-    { name: 'El Aletleri', count: 250 },
-    { name: 'Elektrikli Aletler', count: 180 },
-    { name: 'Boya & Badana', count: 120 },
-    { name: 'Hırdavat', count: 450 },
-    { name: 'Yapı Malzemeleri', count: 320 },
-    { name: 'Bahçe & Dış Mekan', count: 95 },
+    { id: 'el-aletleri', name: 'El Aletleri', count: 250, icon: '🔨' },
+    { id: 'elektrikli-aletler', name: 'Elektrikli Aletler', count: 180, icon: '⚡' },
+    { id: 'boya', name: 'Boya & Badana', count: 120, icon: '🎨' },
+    { id: 'hirdavat', name: 'Hırdavat', count: 450, icon: '🔩' },
+    { id: 'yapi', name: 'Yapı Malzemeleri', count: 320, icon: '🏗️' },
+    { id: 'bahce', name: 'Bahçe & Dış Mekan', count: 95, icon: '🌱' },
   ];
 
   const featuredProducts = [
@@ -135,10 +135,11 @@ export default function Home() {
               {categories.map((category, index) => (
                 <Link
                   key={index}
-                  href={`/kategori/${category.name.toLowerCase().replace(/ /g, '-')}`}
-                  className="modern-card p-6 text-center group"
+                  href={`/urunler?category=${category.id}`}
+                  className="modern-card p-6 text-center group hover:shadow-lg transition-all"
                 >
-                  <h3 className="font-medium text-dark mb-1">{category.name}</h3>
+                  <div className="text-3xl mb-3">{category.icon}</div>
+                  <h3 className="font-medium text-dark mb-1 group-hover:text-primary transition-colors">{category.name}</h3>
                   <p className="text-xs text-secondary">{category.count} ürün</p>
                 </Link>
               ))}

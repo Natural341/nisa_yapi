@@ -141,9 +141,9 @@ export default function Contact() {
                   <div>
                     <h3 className="font-medium text-dark mb-2">Adres</h3>
                     <p className="text-sm text-secondary">
-                      Atatürk Caddesi No:123<br />
-                      Merkez/İstanbul<br />
-                      Türkiye 34000
+                      Gültepe, Halk Cd. 137/a<br />
+                      26040 Odunpazarı/Eskişehir<br />
+                      Türkiye
                     </p>
                   </div>
                 </div>
@@ -162,9 +162,7 @@ export default function Contact() {
                   <div>
                     <h3 className="font-medium text-dark mb-2">Telefon</h3>
                     <p className="text-sm text-secondary">
-                      Sabit: +90 (212) 555 12 34<br />
-                      Mobil: +90 (555) 123 45 67<br />
-                      Faks: +90 (212) 555 12 35
+                      <a href="tel:05458527726" className="hover:text-dark transition-colors">0545 852 77 26</a>
                     </p>
                   </div>
                 </div>
@@ -204,9 +202,8 @@ export default function Contact() {
                   <div>
                     <h3 className="font-medium text-dark mb-2">Çalışma Saatleri</h3>
                     <p className="text-sm text-secondary">
-                      Pazartesi - Cuma: 09:00 - 18:00<br />
-                      Cumartesi: 09:00 - 14:00<br />
-                      Pazar: Kapalı
+                      Pazartesi - Cumartesi: 07:00 - 20:00<br />
+                      Pazar: 08:00 - 18:00
                     </p>
                   </div>
                 </div>
@@ -257,14 +254,42 @@ export default function Contact() {
           <div className="mt-12">
             <div className="modern-card p-6">
               <h2 className="text-xl font-semibold text-dark mb-4">Bizi Ziyaret Edin</h2>
-              <div className="bg-light border border-border rounded h-96 flex items-center justify-center">
-                <div className="text-center">
-                  <svg className="w-16 h-16 mx-auto mb-4 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+              <p className="text-secondary text-sm mb-4">Mağazamızı ziyaret etmek için aşağıdaki haritayı kullanabilirsiniz</p>
+              <div className="bg-light border border-border rounded overflow-hidden" style={{ height: '450px' }}>
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3061.875!2d30.522!3d39.766!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMznCsDQ1JzU3LjYiTiAzMMKwMzEnMTkuMiJF!5e0!3m2!1str!2str!4v1234567890"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-full"
+                ></iframe>
+              </div>
+              <div className="mt-4 flex gap-3">
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=Gültepe,+Halk+Cd.+137/a,+26040+Odunpazarı/Eskişehir"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 bg-dark hover:bg-primary-hover text-white py-3 rounded-lg modern-button font-medium text-sm flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                   </svg>
-                  <p className="text-secondary mb-1">Harita buraya gelecek</p>
-                  <p className="text-sm text-secondary">Google Maps entegrasyonu</p>
-                </div>
+                  Haritada Aç
+                </a>
+                <a
+                  href="https://www.google.com/maps/dir/?api=1&destination=39.766,30.522"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 border-2 border-dark text-dark hover:bg-dark hover:text-white py-3 rounded-lg modern-button font-medium text-sm flex items-center justify-center gap-2 transition-all"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                  Yol Tarifi Al
+                </a>
               </div>
             </div>
           </div>
