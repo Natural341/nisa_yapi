@@ -1,15 +1,18 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useCart } from '../context/CartContext';
+import { useFavorites } from '../context/FavoritesContext';
 
 function ProductsContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
+  const router = useRouter();
 
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('featured');
@@ -17,7 +20,9 @@ function ProductsContent() {
   const [priceRange, setPriceRange] = useState<string[]>([]);
   const [features, setFeatures] = useState<string[]>([]);
   const [minRating, setMinRating] = useState<number>(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState<{[key: number]: number}>({});
   const { addToCart } = useCart();
+  const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
 
   // URL'den kategori parametresini oku
   useEffect(() => {
@@ -36,21 +41,19 @@ function ProductsContent() {
   ];
 
   const products = [
-    { id: 1, name: 'Professional Matkap Seti', category: 'elektrikli-aletler', price: 1299, oldPrice: 1599, rating: 4.8, reviews: 156, isNew: false },
-    { id: 2, name: 'Akülü Vidalama 18V', category: 'elektrikli-aletler', price: 899, oldPrice: null, rating: 4.9, reviews: 89, isNew: true },
-    { id: 3, name: 'Boya Fırça Seti 5li', category: 'boya', price: 149, oldPrice: 199, rating: 4.6, reviews: 234, isNew: false },
-    { id: 4, name: 'Çekiç Seti 3lü', category: 'el-aletleri', price: 299, oldPrice: null, rating: 4.7, reviews: 112, isNew: false },
-    { id: 5, name: 'Metre & Tesviye 5m', category: 'el-aletleri', price: 179, oldPrice: 229, rating: 4.5, reviews: 78, isNew: false },
-    { id: 6, name: 'Tornavida Seti 12li', category: 'el-aletleri', price: 249, oldPrice: null, rating: 4.8, reviews: 145, isNew: true },
-    { id: 7, name: 'Duvar Boyası 15L Beyaz', category: 'boya', price: 459, oldPrice: 549, rating: 4.7, reviews: 203, isNew: false },
-    { id: 8, name: 'Vida Seti Karışık 500 Parça', category: 'hirdavat', price: 189, oldPrice: null, rating: 4.6, reviews: 167, isNew: false },
-    { id: 9, name: 'Dübel Set Karışık 200 Parça', category: 'hirdavat', price: 129, oldPrice: 159, rating: 4.5, reviews: 95, isNew: false },
-    { id: 10, name: 'El Testere 300mm', category: 'el-aletleri', price: 349, oldPrice: null, rating: 4.9, reviews: 178, isNew: true },
-    { id: 11, name: 'Dijital Su Tesviyesi', category: 'el-aletleri', price: 799, oldPrice: 999, rating: 4.8, reviews: 123, isNew: false },
-    { id: 12, name: 'Taş Duvar Kaplama', category: 'yapi', price: 89, oldPrice: null, rating: 4.4, reviews: 56, isNew: false },
-    { id: 13, name: 'Bahçe Makası Profesyonel', category: 'bahce', price: 329, oldPrice: 429, rating: 4.7, reviews: 92, isNew: true },
-    { id: 14, name: 'Daire Testere 1200W', category: 'elektrikli-aletler', price: 1599, oldPrice: null, rating: 4.9, reviews: 134, isNew: false },
-    { id: 15, name: 'Akrilik Boya Set 12 Renk', category: 'boya', price: 279, oldPrice: 349, rating: 4.5, reviews: 88, isNew: false },
+    { id: 1, name: 'D-Max Şerit Metre 5m', category: 'el-aletleri', price: 185, oldPrice: 220, rating: 4.8, reviews: 12, isNew: false, images: ['/urun_foto/d_max5m.webp'] },
+    { id: 2, name: 'D-Max Şerit Metre 3m', category: 'el-aletleri', price: 145, oldPrice: null, rating: 4.7, reviews: 8, isNew: false, images: ['/urun_foto/dmax3m.jpg'] },
+    { id: 3, name: 'Goldfix Silikonlu Derz Dolgu 380 gr', category: 'yapi', price: 89, oldPrice: 110, rating: 4.9, reviews: 23, isNew: true, images: ['/urun_foto/goldfix_1.webp', '/urun_foto/goldfix_2.webp', '/urun_foto/goldfix_3.webp'] },
+    { id: 4, name: 'Selsil 07 Akvaryum Silikonu Şeffaf 280 ml', category: 'yapi', price: 75, oldPrice: 95, rating: 4.6, reviews: 14, isNew: false, images: ['/urun_foto/selsil_07.webp'] },
+    { id: 5, name: 'Selsil Poliüretan Montaj Köpüğü Isı ve Ses Yalıtımı Sağlayan 600 gr', category: 'yapi', price: 125, oldPrice: 155, rating: 4.9, reviews: 20, isNew: true, images: ['/urun_foto/selsil_montaj.jpg', '/urun_foto/selsil_montaj2.jpg'] },
+    { id: 6, name: 'Somafix SE450 Akrilik Mastik 450GR Beyaz', category: 'hirdavat', price: 45, oldPrice: null, rating: 4.8, reviews: 31, isNew: false, images: ['/urun_foto/somafix.jpg'] },
+    { id: 7, name: 'Somafix Beyaz Hibrit High Tack Yapıştırıcı S580 Ultratack 290 ml', category: 'hirdavat', price: 135, oldPrice: 165, rating: 4.9, reviews: 18, isNew: true, images: ['/urun_foto/somafix_s580.webp'] },
+    { id: 8, name: 'PS40 Pas Sökücü ve Yağlayıcı Sprey 200 ml', category: 'hirdavat', price: 165, oldPrice: null, rating: 4.9, reviews: 27, isNew: false, images: ['/urun_foto/ps40.webp'] },
+    { id: 9, name: 'PS20 Pas Sökücü ve Yağlayıcı Sprey 200 ml', category: 'hirdavat', price: 85, oldPrice: 105, rating: 4.7, reviews: 15, isNew: false, images: ['/urun_foto/pas_sokucu.jpg'] },
+    { id: 10, name: 'Eltos Metal Uçlu Cam ve Buz Kazıma Aparatı', category: 'el-aletleri', price: 95, oldPrice: null, rating: 4.6, reviews: 13, isNew: false, images: ['/urun_foto/cam_vebuz.jpg', '/urun_foto/cam_vebuz2.jpg', '/urun_foto/cam_vebuz3.jpg'] },
+    { id: 11, name: 'Tyson Ultra Fix Güçlü Montaj ve Korniş Yapıştırıcısı', category: 'yapi', price: 245, oldPrice: 290, rating: 4.5, reviews: 9, isNew: false, images: ['/urun_foto/korniş.webp'] },
+    { id: 12, name: 'Master Poliüretan Köpük Tabancalı 840 gr', category: 'yapi', price: 285, oldPrice: 350, rating: 4.8, reviews: 16, isNew: true, images: ['/urun_foto/masterpoliüretan.jpeg'] },
+    { id: 13, name: 'Kidmix Pencere Kilidi Çelik Halatlı Anahtarlı Emniyet Şeridi', category: 'hirdavat', price: 65, oldPrice: 85, rating: 4.7, reviews: 9, isNew: false, images: ['/urun_foto/kidmix-pencere-kilidi.webp'] },
   ];
 
   // Filtreleme
@@ -78,8 +81,9 @@ function ProductsContent() {
   if (features.length > 0) {
     filteredProducts = filteredProducts.filter(p => {
       if (features.includes('discounted') && !p.oldPrice) return false;
-      if (features.includes('free-shipping') && p.price < 1000) return false;
+      if (features.includes('free-shipping') && p.price < 500) return false;
       if (features.includes('new') && !p.isNew) return false;
+      if (features.includes('favorites') && !isFavorite(p.id)) return false;
       return true;
     });
   }
@@ -103,6 +107,7 @@ function ProductsContent() {
       id: product.id,
       name: product.name,
       price: product.price,
+      image: product.images[0],
     });
     setAddedToCart(product.id);
     setTimeout(() => setAddedToCart(null), 2000);
@@ -123,6 +128,38 @@ function ProductsContent() {
   const getCategoryName = (categoryId: string) => {
     const category = categories.find(c => c.id === categoryId);
     return category ? category.name : 'Tüm Ürünler';
+  };
+
+  const handleMouseMove = (productId: number, e: React.MouseEvent<HTMLDivElement>, imagesCount: number) => {
+    if (imagesCount <= 1) return;
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const width = rect.width;
+    const percentage = x / width;
+    const imageIndex = Math.floor(percentage * imagesCount);
+
+    setCurrentImageIndex(prev => ({
+      ...prev,
+      [productId]: Math.min(imageIndex, imagesCount - 1)
+    }));
+  };
+
+  const handleMouseLeave = (productId: number) => {
+    setCurrentImageIndex(prev => ({
+      ...prev,
+      [productId]: 0
+    }));
+  };
+
+  const handleFavoriteToggle = (productId: number, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isFavorite(productId)) {
+      removeFromFavorites(productId);
+    } else {
+      addToFavorites(productId);
+    }
   };
 
   return (
@@ -199,6 +236,7 @@ function ProductsContent() {
                   <h3 className="font-medium text-dark mb-3 text-sm">Özellikler</h3>
                   <div className="space-y-2">
                     {[
+                      { value: 'favorites', label: 'Beğenilenler' },
                       { value: 'discounted', label: 'İndirimli' },
                       { value: 'free-shipping', label: 'Ücretsiz Kargo' },
                       { value: 'new', label: 'Yeni Ürünler' }
@@ -289,52 +327,96 @@ function ProductsContent() {
               {/* Products */}
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {sortedProducts.map((product) => (
-                  <div key={product.id} className="modern-card overflow-hidden group relative">
+                  <Link
+                    key={product.id}
+                    href={`/urun/${product.id}`}
+                    className="modern-card overflow-hidden group relative flex flex-col h-full cursor-pointer hover:shadow-xl transition-all"
+                  >
                     {/* Product Image */}
-                    <div className="relative aspect-square bg-gradient-to-br from-gray-lighter to-light flex items-center justify-center overflow-hidden">
-                      <div className="w-32 h-32 bg-gray-light rounded-lg group-hover:scale-110 transition-transform duration-300"></div>
+                    <div
+                      className="relative aspect-square bg-white flex items-center justify-center overflow-hidden p-4"
+                      onMouseMove={(e) => handleMouseMove(product.id, e, product.images.length)}
+                      onMouseLeave={() => handleMouseLeave(product.id)}
+                    >
+                      {product.images && product.images.length > 0 && product.images[currentImageIndex[product.id] || 0] && (
+                        <Image
+                          src={product.images[currentImageIndex[product.id] || 0]}
+                          alt={product.name}
+                          width={300}
+                          height={300}
+                          className="object-contain w-full h-full group-hover:scale-110 transition-transform duration-300"
+                        />
+                      )}
+                      {/* Image Indicators */}
+                      {product.images.length > 1 && (
+                        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
+                          {product.images.map((_, idx) => (
+                            <div
+                              key={idx}
+                              className={`w-1.5 h-1.5 rounded-full transition-all ${
+                                (currentImageIndex[product.id] || 0) === idx
+                                  ? 'bg-dark w-4'
+                                  : 'bg-gray-light'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      )}
 
                       {/* Badges */}
-                      <div className="absolute top-3 left-3 flex flex-col gap-2">
+                      <div className="absolute top-3 left-3 flex gap-2 flex-wrap max-w-[calc(100%-80px)]">
                         {product.oldPrice && (
-                          <span className="bg-red-600 text-white text-xs px-2.5 py-1 rounded-full font-semibold shadow-lg">
-                            -{Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)}%
-                          </span>
+                          <div className="bg-gradient-to-r from-green-600 to-green-500 text-white px-3 py-1.5 rounded-lg font-black text-xs leading-tight shadow-lg">
+                            %{Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)} İNDİRİM
+                          </div>
                         )}
                         {product.isNew && (
-                          <span className="bg-blue-600 text-white text-xs px-2.5 py-1 rounded-full font-semibold shadow-lg">
-                            Yeni
-                          </span>
+                          <div className="bg-dark text-white px-3 py-1.5 rounded-lg font-black text-xs leading-tight shadow-lg">
+                            YENİ
+                          </div>
                         )}
-                        {product.price >= 1000 && (
-                          <span className="bg-green-600 text-white text-xs px-2.5 py-1 rounded-full font-semibold shadow-lg">
-                            Ücretsiz Kargo
-                          </span>
+                        {product.price >= 500 && (
+                          <div className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white px-3 py-1.5 rounded-lg font-black text-xs leading-tight shadow-lg">
+                            ÜCRETSİZ KARGO
+                          </div>
                         )}
                       </div>
 
                       {/* Quick Actions */}
                       <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2">
-                        <button className="w-9 h-9 bg-white hover:bg-dark hover:text-white rounded-full shadow-lg flex items-center justify-center transition-all">
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <button
+                          onClick={(e) => handleFavoriteToggle(product.id, e)}
+                          className={`w-9 h-9 rounded-full shadow-lg flex items-center justify-center transition-all ${
+                            isFavorite(product.id)
+                              ? 'bg-red-500 text-white hover:bg-red-600'
+                              : 'bg-white hover:bg-red-500 hover:text-white text-gray-400'
+                          }`}
+                          title={isFavorite(product.id) ? 'Favorilerden Çıkar' : 'Favorilere Ekle'}
+                        >
+                          <svg className="w-5 h-5" fill={isFavorite(product.id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                           </svg>
                         </button>
-                        <Link
-                          href={`/urun/${product.id}`}
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            router.push(`/urun/${product.id}`);
+                          }}
                           className="w-9 h-9 bg-white hover:bg-dark hover:text-white rounded-full shadow-lg flex items-center justify-center transition-all"
+                          title="Ürün Detayını Gör"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                           </svg>
-                        </Link>
+                        </button>
                       </div>
                     </div>
 
                     {/* Product Info */}
-                    <div className="p-5">
-                      <h3 className="font-semibold text-dark mb-2 min-h-[48px] group-hover:text-dark/70 transition-colors line-clamp-2">
+                    <div className="p-5 flex flex-col flex-1">
+                      <h3 className="font-semibold text-dark mb-2 h-12 group-hover:text-dark/70 transition-colors line-clamp-2">
                         {product.name}
                       </h3>
 
@@ -353,23 +435,27 @@ function ProductsContent() {
                       </div>
 
                       {/* Price */}
-                      <div className="mb-4">
-                        <div className="flex items-baseline gap-2 mb-1">
+                      <div className="mb-4 h-[68px]">
+                        <div className="flex items-center gap-2 mb-1.5">
                           <span className="text-2xl font-bold text-dark">{product.price.toLocaleString('tr-TR')} ₺</span>
                           {product.oldPrice && (
                             <span className="text-sm text-secondary line-through">{product.oldPrice.toLocaleString('tr-TR')} ₺</span>
                           )}
                         </div>
                         {product.oldPrice && (
-                          <p className="text-xs text-green-600 font-medium">
+                          <div className="text-xs font-semibold text-green-600">
                             {(product.oldPrice - product.price).toLocaleString('tr-TR')} ₺ tasarruf
-                          </p>
+                          </div>
                         )}
                       </div>
 
                       {/* Actions */}
                       <button
-                        onClick={() => handleAddToCart(product)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleAddToCart(product);
+                        }}
                         className={`w-full py-3 rounded-lg font-semibold text-sm transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 ${
                           addedToCart === product.id
                             ? 'bg-green-600 text-white'
@@ -393,7 +479,7 @@ function ProductsContent() {
                         )}
                       </button>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
 

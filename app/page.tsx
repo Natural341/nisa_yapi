@@ -1,26 +1,42 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
 export default function Home() {
+  const [currentImageIndex, setCurrentImageIndex] = useState<{ [key: number]: number }>({});
   const categories = [
-    { id: 'el-aletleri', name: 'El Aletleri', count: 250, icon: '🔨' },
-    { id: 'elektrikli-aletler', name: 'Elektrikli Aletler', count: 180, icon: '⚡' },
-    { id: 'boya', name: 'Boya & Badana', count: 120, icon: '🎨' },
-    { id: 'hirdavat', name: 'Hırdavat', count: 450, icon: '🔩' },
-    { id: 'yapi', name: 'Yapı Malzemeleri', count: 320, icon: '🏗️' },
-    { id: 'bahce', name: 'Bahçe & Dış Mekan', count: 95, icon: '🌱' },
+    { id: 'el-aletleri', name: 'El Aletleri', count: 3 },
+    { id: 'elektrikli-aletler', name: 'Elektrikli Aletler', count: 0 },
+    { id: 'boya', name: 'Boya & Badana', count: 0 },
+    { id: 'hirdavat', name: 'Hırdavat', count: 5 },
+    { id: 'yapi', name: 'Yapı Malzemeleri', count: 5 },
+    { id: 'bahce', name: 'Bahçe & Dış Mekan', count: 0 },
   ];
 
   const featuredProducts = [
-    { id: 1, name: 'Professional Matkap Seti', price: '1.299', oldPrice: '1.599' },
-    { id: 2, name: 'Akülü Vidalama', price: '899', oldPrice: null },
-    { id: 3, name: 'Boya Fırça Seti', price: '149', oldPrice: '199' },
-    { id: 4, name: 'Çekiç Seti 3lü', price: '299', oldPrice: null },
-    { id: 5, name: 'Metre & Tesviye', price: '179', oldPrice: '229' },
-    { id: 6, name: 'Tornavida Seti', price: '249', oldPrice: null },
+    { id: 1, name: 'D-Max Şerit Metre 5m', price: '185', oldPrice: '220', images: ['/urun_foto/d_max5m.webp'] },
+    { id: 3, name: 'Goldfix Silikonlu Derz Dolgu 380 gr', price: '89', oldPrice: '110', images: ['/urun_foto/goldfix_1.webp', '/urun_foto/goldfix_2.webp', '/urun_foto/goldfix_3.webp'] },
+    { id: 5, name: 'Selsil Poliüretan Montaj Köpüğü', price: '125', oldPrice: '155', images: ['/urun_foto/selsil_montaj.jpg', '/urun_foto/selsil_pu.webp'] },
+    { id: 8, name: 'PS40 Pas Sökücü ve Yağlayıcı Sprey', price: '165', oldPrice: null, images: ['/urun_foto/ps40.webp'] },
+    { id: 7, name: 'Somafix S580 Ultratack Yapıştırıcı', price: '135', oldPrice: '165', images: ['/urun_foto/somafix_s580.webp'] },
+    { id: 11, name: 'Tyson Ultra Fix Korniş Yapıştırıcısı', price: '245', oldPrice: '290', images: ['/urun_foto/korniş.webp'] },
   ];
+
+  const handleMouseMove = (productId: number, e: React.MouseEvent<HTMLDivElement>, imagesCount: number) => {
+    if (imagesCount <= 1) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = x / rect.width;
+    const imageIndex = Math.floor(percentage * imagesCount);
+    setCurrentImageIndex(prev => ({
+      ...prev,
+      [productId]: Math.min(imageIndex, imagesCount - 1)
+    }));
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -28,7 +44,7 @@ export default function Home() {
 
       <main>
         {/* Hero Section */}
-        <section className="relative bg-dark py-24 md:py-32 overflow-hidden">
+        <section className="relative bg-dark py-16 md:py-24 lg:py-32 overflow-hidden">
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-5">
             <div className="absolute inset-0" style={{
@@ -38,12 +54,12 @@ export default function Home() {
           </div>
 
           <div className="container mx-auto px-4 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               <div>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-6 leading-tight">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-4 md:mb-6 leading-tight">
                   Hayalinizdeki Projeyi Gerçeğe Dönüştürün
                 </h1>
-                <p className="text-lg text-gray-light mb-8 leading-relaxed">
+                <p className="text-base md:text-lg text-gray-light mb-6 md:mb-8 leading-relaxed">
                   Profesyonel kalitede hırdavat ve yapı malzemeleri.
                   Güvenilir markalar, uygun fiyatlar, hızlı teslimat.
                 </p>
@@ -62,6 +78,20 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
+              {/* Mobile Mascot - Small and centered */}
+              <div className="relative flex lg:hidden justify-center items-center">
+                <div className="relative w-48 h-48 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-white/10 rounded-full blur-2xl"></div>
+                  <Image
+                    src="/maskot.png"
+                    alt="Nisa Yapı Market"
+                    width={180}
+                    height={180}
+                    className="relative z-10 drop-shadow-2xl"
+                  />
+                </div>
+              </div>
+              {/* Desktop Mascot - Large */}
               <div className="relative hidden lg:flex justify-center items-center">
                 <div className="relative w-96 h-96 flex items-center justify-center">
                   <div className="absolute inset-0 bg-white/10 rounded-full blur-3xl"></div>
@@ -138,7 +168,6 @@ export default function Home() {
                   href={`/urunler?category=${category.id}`}
                   className="modern-card p-6 text-center group hover:shadow-lg transition-all"
                 >
-                  <div className="text-3xl mb-3">{category.icon}</div>
                   <h3 className="font-medium text-dark mb-1 group-hover:text-primary transition-colors">{category.name}</h3>
                   <p className="text-xs text-secondary">{category.count} ürün</p>
                 </Link>
@@ -167,8 +196,29 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {featuredProducts.map((product) => (
                 <div key={product.id} className="modern-card overflow-hidden group">
-                  <div className="aspect-square bg-light flex items-center justify-center">
-                    <div className="w-32 h-32 bg-gray-lighter rounded"></div>
+                  <div
+                    className="aspect-square bg-white flex items-center justify-center p-4 relative"
+                    onMouseMove={(e) => handleMouseMove(product.id, e, product.images.length)}
+                  >
+                    <Image
+                      src={product.images[currentImageIndex[product.id] || 0]}
+                      alt={product.name}
+                      width={300}
+                      height={300}
+                      className="object-contain w-full h-full group-hover:scale-110 transition-all duration-300"
+                    />
+                    {product.images.length > 1 && (
+                      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
+                        {product.images.map((_, idx) => (
+                          <div
+                            key={idx}
+                            className={`h-1.5 rounded-full transition-all duration-300 ${
+                              (currentImageIndex[product.id] || 0) === idx ? 'bg-dark w-4' : 'bg-gray-light w-1.5'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div className="p-6">
                     <h3 className="font-medium text-dark mb-3 min-h-[48px]">{product.name}</h3>
@@ -178,9 +228,9 @@ export default function Home() {
                         <span className="text-sm text-secondary line-through">{product.oldPrice} ₺</span>
                       )}
                     </div>
-                    <button className="w-full bg-dark hover:bg-primary-hover text-white py-3 rounded modern-button font-medium">
-                      Sepete Ekle
-                    </button>
+                    <Link href={`/urun/${product.id}`} className="w-full bg-dark hover:bg-primary-hover text-white py-3 rounded modern-button font-medium block text-center">
+                      İncele
+                    </Link>
                   </div>
                 </div>
               ))}

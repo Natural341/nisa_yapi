@@ -13,12 +13,12 @@ export default function Header() {
   const { isLoggedIn, user } = useUser();
 
   const categories = [
-    { id: 'el-aletleri', name: 'El Aletleri', icon: '🔨' },
-    { id: 'elektrikli-aletler', name: 'Elektrikli Aletler', icon: '⚡' },
-    { id: 'boya', name: 'Boya & Badana', icon: '🎨' },
-    { id: 'hirdavat', name: 'Hırdavat', icon: '🔩' },
-    { id: 'yapi', name: 'Yapı Malzemeleri', icon: '🏗️' },
-    { id: 'bahce', name: 'Bahçe & Dış Mekan', icon: '🌱' },
+    { id: 'el-aletleri', name: 'El Aletleri' },
+    { id: 'elektrikli-aletler', name: 'Elektrikli Aletler' },
+    { id: 'boya', name: 'Boya & Badana' },
+    { id: 'hirdavat', name: 'Hırdavat' },
+    { id: 'yapi', name: 'Yapı Malzemeleri' },
+    { id: 'bahce', name: 'Bahçe & Dış Mekan' },
   ];
 
   return (
@@ -84,7 +84,6 @@ export default function Header() {
                             href={`/urunler?category=${category.id}`}
                             className="flex items-center gap-3 px-4 py-3 hover:bg-light rounded-lg transition-colors group"
                           >
-                            <span className="text-2xl">{category.icon}</span>
                             <span className="text-dark group-hover:text-dark/70 text-sm font-medium">{category.name}</span>
                             <svg className="w-4 h-4 ml-auto text-secondary group-hover:text-dark transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -121,10 +120,10 @@ export default function Header() {
                 </svg>
               </button>
 
-              {/* Account */}
+              {/* Account - Now visible on mobile */}
               <Link
                 href={isLoggedIn ? "/hesabim" : "/hesap"}
-                className="hidden md:flex items-center justify-center w-9 h-9 hover:bg-gray-lighter text-secondary hover:text-dark transition-colors rounded"
+                className="flex items-center justify-center w-9 h-9 hover:bg-gray-lighter text-secondary hover:text-dark transition-colors rounded"
                 title={isLoggedIn ? user?.name : "Giriş Yap"}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -183,7 +182,6 @@ export default function Header() {
                         href={`/urunler?category=${category.id}`}
                         className="flex items-center gap-2 text-secondary hover:text-dark hover:bg-gray-lighter transition-colors py-2 px-3 rounded text-sm"
                       >
-                        <span>{category.icon}</span>
                         <span>{category.name}</span>
                       </Link>
                     ))}

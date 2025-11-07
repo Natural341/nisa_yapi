@@ -8,7 +8,11 @@
       "Bash(git remote:*)",
       "Bash(git branch:*)",
       "Bash(git push:*)",
-      "Bash(dir \"C:\\Users\\okan\\Downloads\\dark-1\\nalbur\\app\")"
+      "Bash(dir \"C:\\Users\\okan\\Downloads\\dark-1\\nalbur\\app\")",
+      "Bash(dir \"C:\\Users\\okan\\Downloads\\dark-1\\nalbur\\public\")",
+      "Bash(dir \"C:\\Users\\okan\\Downloads\\dark-1\\nalbur\\public\\urun_foto\")",
+      "Bash(findstr:*)",
+      "Bash(dir /b:*)"
     ],
     "deny": [],
     "ask": []

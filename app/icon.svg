@@ -1,0 +1,17 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Arka plan -->
+  <rect width="32" height="32" rx="6" fill="#2C3E50"/>
+
+  <!-- Çekiç Başı -->
+  <rect x="10" y="11" width="14" height="10" rx="1" fill="#1a252f" stroke="#fff" stroke-width="0.5"/>
+
+  <!-- Çekiç Sapı -->
+  <rect x="15.5" y="20" width="2" height="10" rx="1" fill="#8B4513" stroke="#fff" stroke-width="0.3"/>
+
+  <!-- Sap Ucu -->
+  <circle cx="16.5" cy="29" r="1" fill="#5d2e0d"/>
+
+  <!-- Parlama Efekti -->
+  <circle cx="13" y="14" r="1.2" fill="#fff" opacity="0.6"/>
+  <rect x="11" y="13" width="4" height="1" rx="0.5" fill="#fff" opacity="0.3"/>
+</svg>
